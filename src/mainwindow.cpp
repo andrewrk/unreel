@@ -38,7 +38,7 @@ void MainWindow::on_pushButton_clicked()
     ui->videoListView->addItem(QFileInfo(fileName).baseName());
 }
 
-void MainWindow::on_videoListView_itemClicked(QListWidgetItem *item)
+void MainWindow::on_videoListView_itemClicked(QListWidgetItem *)
 {
     playlist->setCurrentIndex(ui->videoListView->currentRow());
     player->play();

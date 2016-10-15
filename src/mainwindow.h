@@ -26,7 +26,7 @@ private slots:
 
     void on_pushButton_clicked();
 
-    void on_videoListView_itemClicked(QListWidgetItem *item);
+    void on_videoListView_itemClicked(QListWidgetItem *);
 
 private:
     Ui::MainWindow *ui;
