@@ -7,11 +7,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     filePaths = new QList<QString>();
+
     player = new QMediaPlayer();
-    videoWidget = new QVideoWidget();
-    playlist = new QMediaPlaylist();
-    player->setVideoOutput(videoWidget);
-    this->centralWidget()->layout()->replaceWidget(ui->videoPlaceHolder, videoWidget);
+    bool ok = connect(player, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(handleVideoError(QMediaPlayer::Error)));
+
+    player->setVideoOutput(ui->videoWidget);
+    ui->videoWidget->show();
+
+    assert(ok);
 }
 
 MainWindow::~MainWindow()
@@ -32,14 +35,23 @@ void MainWindow::on_pushButton_clicked()
 {
     //TODO: Filter only video files
     QString fileName = QFileDialog::getOpenFileName(this,
-        "Open Video", QString(), "Video Files (*)");
+        "Open Video", "~/Downloads", "Video Files (*)");
+    player->setMedia(QUrl::fromLocalFile(fileName));
+    player->play();
+    videoWidget->updateGeometry();
     filePaths->append(fileName);
-    playlist->addMedia(QUrl(fileName));
     ui->videoListView->addItem(QFileInfo(fileName).baseName());
 }
 
 void MainWindow::on_videoListView_itemClicked(QListWidgetItem *)
 {
-    playlist->setCurrentIndex(ui->videoListView->currentRow());
+    int index = ui->videoListView->currentRow();
+    player->setMedia(QUrl::fromLocalFile(filePaths->at(index)));
     player->play();
+    videoWidget->updateGeometry();
+}
+
+void MainWindow::handleVideoError(QMediaPlayer::Error e)
+{
+    printf("%d\n", e);
 }

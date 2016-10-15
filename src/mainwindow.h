@@ -8,6 +8,7 @@
 #include <QVideoWidget>
 #include <QFileInfo>
 #include <QListWidgetItem>
+#include <assert.h>
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +28,8 @@ private slots:
     void on_pushButton_clicked();
 
     void on_videoListView_itemClicked(QListWidgetItem *);
+
+    void handleVideoError(QMediaPlayer::Error);
 
 private:
     Ui::MainWindow *ui;
