@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QMediaPlayer>
+#include <QMediaPlaylist>
+#include <QVideoWidget>
 #include <QFileInfo>
 #include <QListWidgetItem>
 
@@ -30,6 +32,8 @@ private:
     Ui::MainWindow *ui;
     QList<QString> *filePaths;
     QMediaPlayer *player;
+    QVideoWidget *videoWidget;
+    QMediaPlaylist *playlist;
 };
 
 #endif // MAINWINDOW_H
