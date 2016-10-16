@@ -1,6 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+struct project {
+    QList<QString> filePaths;
+    int index;
+    qint64 position;
+};
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -20,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete player;
-    delete videoWidget;
     delete playlist;
     delete filePaths;
     delete ui;
@@ -35,10 +40,8 @@ void MainWindow::on_pushButton_clicked()
 {
     //TODO: Filter only video files
     QString fileName = QFileDialog::getOpenFileName(this,
-        "Open Video", "~/Downloads", "Video Files (*)");
-    player->setMedia(QUrl::fromLocalFile(fileName));
-    player->play();
-    videoWidget->updateGeometry();
+        "Open Video", QDir::homePath(), "Video Files (*)");
+    playVideo(fileName);
     filePaths->append(fileName);
     ui->videoListView->addItem(QFileInfo(fileName).baseName());
 }
@@ -46,12 +49,33 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_videoListView_itemClicked(QListWidgetItem *)
 {
     int index = ui->videoListView->currentRow();
-    player->setMedia(QUrl::fromLocalFile(filePaths->at(index)));
-    player->play();
-    videoWidget->updateGeometry();
+    playVideo(filePaths->at(index));
 }
 
 void MainWindow::handleVideoError(QMediaPlayer::Error e)
 {
     printf("%d\n", e);
+}
+
+void MainWindow::playVideo(QString path) {
+    player->setMedia(QUrl::fromLocalFile(path));
+    player->play();
+    ui->videoWidget->setAspectRatioMode(Qt::IgnoreAspectRatio);
+    ui->videoWidget->setAspectRatioMode(Qt::KeepAspectRatio);
+}
+
+void MainWindow::saveProject() {
+
+}
+
+void MainWindow::loadFile() {
+    QString projectFilePath = QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
+            .absoluteFilePath("project.unreel");
+
+    QFile file(projectFilePath);
+    if(!file.open(QIODevice::ReadOnly)) {
+        return;
+    }
+
+    file.close();
 }

@@ -8,6 +8,7 @@
 #include <QVideoWidget>
 #include <QFileInfo>
 #include <QListWidgetItem>
+#include <QStandardPaths>
 #include <assert.h>
 
 namespace Ui {
@@ -35,8 +36,11 @@ private:
     Ui::MainWindow *ui;
     QList<QString> *filePaths;
     QMediaPlayer *player;
-    QVideoWidget *videoWidget;
     QMediaPlaylist *playlist;
+
+    void playVideo(QString path);
+    void saveProject();
+    void loadFile();
 };
 
 #endif // MAINWINDOW_H
